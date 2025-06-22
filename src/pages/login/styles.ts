@@ -20,7 +20,7 @@ export const styles = StyleSheet.create({
   forgotPassword: {
     textAlign: 'right',
     marginBottom: 24,
-    color: '#1976d2',
+    color: '#d32f2f',
   },
   loginButton: {
     paddingVertical: 8,
@@ -31,7 +31,13 @@ export const styles = StyleSheet.create({
     color: '#555',
   },
   link: {
-    color: '#1976d2',
+    color: '#d32f2f',
     fontWeight: 'bold',
+  },
+  logo: {
+    width: 160,
+    height: 160,
+    alignSelf: 'center',
+    marginBottom: 24,
   },
 });

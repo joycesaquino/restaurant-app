@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import { TextInput, Button, Text, useTheme, ActivityIndicator, MD2Colors } from 'react-native-paper';
+import { View, TouchableOpacity, Alert, Image  } from 'react-native';
+import { TextInput, Button, Text, ActivityIndicator, MD2Colors } from 'react-native-paper';
 import { styles } from './styles';
-// import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../../route-types';
+type Navigation = NativeStackNavigationProp<RootStackParamList>;
 
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
-    const theme = useTheme();
-    //   const navigation = useNavigation();
+    const navigation = useNavigation<Navigation>();
 
     async function getLogin() {
         try {
@@ -21,8 +23,9 @@ export default function Login() {
 
             setTimeout(() => {
                 setLoading(false);
-                return Alert.alert(`Logado com sucesso!`)
-            }, 5000);
+                navigation.navigate('Home');
+            }, 2000);
+
         } catch(error) {
             console.log(error);
             setLoading(false);
@@ -32,7 +35,11 @@ export default function Login() {
     return (
         <View style={styles.container}>
             <ActivityIndicator size={"large"} animating={loading} color={MD2Colors.red800} />
-            <Text style={styles.title}>Entrar</Text>
+            <Image
+            source={require('../../assets/logotipo.png')} // Substitua pelo caminho real da sua imagem
+            style={styles.logo}
+            resizeMode="contain"
+            />
 
             <TextInput
                 label="Email"
@@ -70,7 +77,7 @@ export default function Login() {
                 Você não tem uma conta?{' '}
                 <Text
                     style={styles.link}
-                    onPress={() => { }}
+                    onPress={() => navigation.navigate('UserRegistration')}
                 >
                     Crie uma
                 </Text>
