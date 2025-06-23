@@ -5,4 +5,5 @@ export type RootStackParamList = {
   ProductRegistration: undefined;
   MenuList: undefined;
   RestaurantRegistration: undefined;
+  Onboarding: undefined;
 };

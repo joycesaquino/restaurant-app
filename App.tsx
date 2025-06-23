@@ -7,6 +7,7 @@ import UserRegistration from './src/pages/user-registration';
 import ProductRegistration from './src/pages/product-registration';
 import MenuList from './src/pages/menu-list';
 import RestaurantRegistration from './src/pages/restaurant-registration';
+import Onboarding from './src/pages/onboarding';
 
 
 const Stack = createNativeStackNavigator();
@@ -15,7 +16,13 @@ export default function App() {
   return (
     <PaperProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Login">
+        <Stack.Navigator initialRouteName="Onboarding">
+          <Stack.Screen
+            name="Onboarding"
+            component={Onboarding}
+            options={{ headerShown: false }}
+          />
+
           <Stack.Screen
             name="Login"
             component={Login}

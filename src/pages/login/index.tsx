@@ -36,7 +36,7 @@ export default function Login() {
         <View style={styles.container}>
             <ActivityIndicator size={"large"} animating={loading} color={MD2Colors.red800} />
             <Image
-            source={require('../../assets/logotipo.png')} // Substitua pelo caminho real da sua imagem
+            source={require('../../../assets/logotipo.png')} // Substitua pelo caminho real da sua imagem
             style={styles.logo}
             resizeMode="contain"
             />
