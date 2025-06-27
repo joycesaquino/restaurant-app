@@ -14,9 +14,6 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#333',
   },
-  input: {
-    marginBottom: 16,
-  },
   forgotPassword: {
     textAlign: 'right',
     marginBottom: 24,

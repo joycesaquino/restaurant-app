@@ -1,87 +1,108 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity, Alert, Image  } from 'react-native';
-import { TextInput, Button, Text, ActivityIndicator, MD2Colors } from 'react-native-paper';
+import { View, TouchableOpacity, Image } from 'react-native';
+import { TextInput, Button, Text, HelperText } from 'react-native-paper';
 import { styles } from './styles';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../route-types';
+import { LoadingOverlay } from '../../components/loading-overlay';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+
 type Navigation = NativeStackNavigationProp<RootStackParamList>;
 
+const validationSchema = Yup.object().shape({
+  email: Yup.string().email('Email inválido').required('Informe o email'),
+  password: Yup.string().min(6, 'Mínimo 6 caracteres').required('Informe a senha'),
+});
+
 export default function Login() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [loading, setLoading] = useState(false);
-    const navigation = useNavigation<Navigation>();
+  const [loading, setLoading] = useState(false);
+  const navigation = useNavigation<Navigation>();
 
-    async function getLogin() {
-        try {
-            setLoading(true);
-            if(!email || !password) {
-                setLoading(false);
-                return Alert.alert(`Atenção`, `Informe os campos obrigatórios`);
-            }
-
-            setTimeout(() => {
-                setLoading(false);
-                navigation.navigate('Home');
-            }, 2000);
-
-        } catch(error) {
-            console.log(error);
-            setLoading(false);
-        }
+  const handleLogin = async (values: { email: string; password: string }) => {
+    try {
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+        navigation.navigate('Home');
+      }, 2000);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
     }
+  };
 
-    return (
-        <View style={styles.container}>
-            <ActivityIndicator size={"large"} animating={loading} color={MD2Colors.red800} />
-            <Image
-            source={require('../../../assets/logotipo.png')} // Substitua pelo caminho real da sua imagem
-            style={styles.logo}
-            resizeMode="contain"
+  return (
+    <View style={styles.container}>
+      <LoadingOverlay visible={loading} />
+
+      <Image
+        source={require('../../../assets/logotipo.png')}
+        style={styles.logo}
+        resizeMode="contain"
+      />
+
+      <Formik
+        initialValues={{ email: '', password: '' }}
+        validationSchema={validationSchema}
+        onSubmit={handleLogin}
+      >
+        {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isValid, dirty }) => (
+          <>
+            <TextInput
+              label="Email"
+              value={values.email}
+              onChangeText={handleChange('email')}
+              onBlur={handleBlur('email')}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              mode="outlined"
+              error={touched.email && !!errors.email}
             />
+            <HelperText type="error" visible={touched.email && !!errors.email}>
+              {errors.email}
+            </HelperText>
 
             <TextInput
-                label="Email"
-                value={email}
-                onChangeText={setEmail}
-                mode="outlined"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                style={styles.input}
+              label="Senha"
+              value={values.password}
+              onChangeText={handleChange('password')}
+              onBlur={handleBlur('password')}
+              secureTextEntry
+              mode="outlined"
+              error={touched.password && !!errors.password}
             />
-
-            <TextInput
-                label="Senha"
-                value={password}
-                onChangeText={setPassword}
-                mode="outlined"
-                secureTextEntry
-                style={styles.input}
-            />
+            <HelperText type="error" visible={touched.password && !!errors.password}>
+              {errors.password}
+            </HelperText>
 
             <TouchableOpacity onPress={() => console.log('Esqueceu a senha')}>
-                <Text style={styles.forgotPassword}>Esqueceu a senha?</Text>
+              <Text style={styles.forgotPassword}>Esqueceu a senha?</Text>
             </TouchableOpacity>
 
             <Button
-                mode="contained"
-                onPress={() => getLogin()}
-                buttonColor="#d32f2f"
-                style={styles.loginButton}
+              mode="contained"
+              onPress={() => handleSubmit()}
+              buttonColor="#d32f2f"
+              style={styles.loginButton}
+              disabled={!isValid || !dirty}
             >
-                Entrar
+              Entrar
             </Button>
+          </>
+        )}
+      </Formik>
 
-            <Text style={styles.footerText}>
-                Você não tem uma conta?{' '}
-                <Text
-                    style={styles.link}
-                    onPress={() => navigation.navigate('UserRegistration')}
-                >
-                    Crie uma
-                </Text>
-            </Text>
-        </View>
-    );
+      <Text style={styles.footerText}>
+        Você não tem uma conta?{' '}
+        <Text
+          style={styles.link}
+          onPress={() => navigation.navigate('UserRegistration')}
+        >
+          Crie uma
+        </Text>
+      </Text>
+    </View>
+  );
 }
