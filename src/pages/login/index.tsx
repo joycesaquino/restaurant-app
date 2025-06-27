@@ -61,7 +61,7 @@ export default function Login() {
               error={touched.email && !!errors.email}
             />
             <HelperText type="error" visible={touched.email && !!errors.email}>
-              {errors.email}
+              {touched.email && errors.email}
             </HelperText>
 
             <TextInput
@@ -74,7 +74,7 @@ export default function Login() {
               error={touched.password && !!errors.password}
             />
             <HelperText type="error" visible={touched.password && !!errors.password}>
-              {errors.password}
+              {touched.password  && errors.password}
             </HelperText>
 
             <TouchableOpacity onPress={() => console.log('Esqueceu a senha')}>

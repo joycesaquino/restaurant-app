@@ -11,9 +11,6 @@ export const styles = StyleSheet.create({
     marginBottom: 24,
     textAlign: 'center',
   },
-  input: {
-    marginBottom: 16,
-  },
   menuButton: {
     marginBottom: 16,
   },
