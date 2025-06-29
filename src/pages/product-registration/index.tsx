@@ -1,14 +1,21 @@
 import React, { useState } from 'react';
 import { View, Image, Alert } from 'react-native';
-import { TextInput, Button, Text } from 'react-native-paper';
+import { TextInput, Button, HelperText } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 import { styles } from './styles';
+import * as Yup from 'yup';
+import { Formik } from 'formik';
+import { LoadingOverlay } from '../../components/loading-overlay';
+
+const validationSchema = Yup.object().shape({
+  name: Yup.string().min(6, 'Mínimo 6 caracteres').required('Informe o nome'),
+  description: Yup.string().required('Informe a descrição'),
+  price: Yup.number().typeError('Informe um preço válido').required('Informe o preço'),
+});
 
 export default function ProductRegistration() {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [price, setPrice] = useState('');
   const [imageUri, setImageUri] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const escolherImagem = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -28,64 +35,83 @@ export default function ProductRegistration() {
     }
   };
 
-  const handleCadastro = () => {
-    if (!name || !description || !price || !imageUri) {
-      Alert.alert('Erro', 'Preencha todos os campos e selecione uma imagem.');
+  const handleCadastro = (values: any) => {
+    if (!imageUri) {
+      Alert.alert('Erro', 'Selecione uma imagem para o produto.');
       return;
     }
-
-    console.log({
-      name,
-      description,
-      price,
-      imagem: imageUri,
-    });
-
-    Alert.alert('Sucesso', 'Produto cadastrado com sucesso!');
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      console.log({ ...values, imageUri });
+      Alert.alert('Sucesso', 'Produto cadastrado com sucesso!');
+    }, 2000);
   };
 
   return (
     <View style={styles.container}>
-      <Text variant="headlineMedium" style={styles.title}>Cadastro de Produto</Text>
+      <LoadingOverlay visible={loading} />
 
-      <TextInput
-        label="Nome do prato"
-        value={name}
-        onChangeText={setName}
-        mode="outlined"
-        style={styles.input}
-      />
+      <Formik
+        initialValues={{ name: '', description: '', price: '' }}
+        validationSchema={validationSchema}
+        onSubmit={handleCadastro}
+      >
+        {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isValid, dirty }) => (
+          <>
+            <TextInput
+              label="Nome do prato"
+              value={values.name}
+              onChangeText={handleChange('name')}
+              onBlur={handleBlur('name')}
+              mode="outlined"
+              error={touched.name && !!errors.name}
+            />
+            <HelperText type="error" visible={touched.name && !!errors.name}>
+              {touched.name && errors.name}
+            </HelperText>
 
-      <TextInput
-        label="Descrição"
-        value={description}
-        onChangeText={setDescription}
-        mode="outlined"
-        multiline
-        numberOfLines={4}
-        style={styles.input}
-      />
+            <TextInput
+              label="Descrição"
+              value={values.description}
+              onChangeText={handleChange('description')}
+              onBlur={handleBlur('description')}
+              mode="outlined"
+              multiline
+              numberOfLines={4}
+              error={touched.description && !!errors.description}
+            />
+            <HelperText type="error" visible={touched.description && !!errors.description}>
+              {touched.description && errors.description}
+            </HelperText>
 
-      <TextInput
-        label="Preço"
-        value={price}
-        onChangeText={setPrice}
-        mode="outlined"
-        keyboardType="decimal-pad"
-        style={styles.input}
-      />
+            <TextInput
+              label="Preço"
+              value={values.price}
+              onChangeText={handleChange('price')}
+              onBlur={handleBlur('price')}
+              mode="outlined"
+              keyboardType="decimal-pad"
+              error={touched.price && !!errors.price}
+            />
+            <HelperText type="error" visible={touched.price && !!errors.price}>
+              {touched.price && errors.price}
+            </HelperText>
 
-      <Button mode="outlined" onPress={escolherImagem} style={styles.imageButton} textColor="#d32f2f">
-        {imageUri ? 'Trocar Imagem' : 'Selecionar Imagem'}
-      </Button>
+            <Button mode="outlined" onPress={escolherImagem} style={styles.imageButton} textColor="#d32f2f">
+              {imageUri ? 'Trocar Imagem' : 'Selecionar Imagem'}
+            </Button>
 
-      {imageUri && (
-        <Image source={{ uri: imageUri }} style={styles.imagePreview} />
-      )}
+            {imageUri && (
+              <Image source={{ uri: imageUri }} style={styles.imagePreview} />
+            )}
 
-      <Button mode="contained" onPress={handleCadastro} style={styles.submitButton} buttonColor="#d32f2f">
-        Cadastrar Produto
-      </Button>
+            <Button mode="contained" onPress={() => handleSubmit()} style={styles.submitButton} buttonColor="#d32f2f" disabled={!isValid || !dirty}>
+              Cadastrar Produto
+            </Button>
+          </>
+        )}
+      </Formik>
     </View>
   );
 }

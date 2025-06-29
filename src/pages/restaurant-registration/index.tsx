@@ -32,10 +32,6 @@ export default function RestaurantRegistration() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text variant="headlineMedium" style={styles.title}>
-        Cadastro de Restaurante
-      </Text>
-
       <TextInput
         label="Nome do Restaurante"
         value={name}

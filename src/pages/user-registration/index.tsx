@@ -29,10 +29,6 @@ export default function UserRegistration() {
     return (
         <View style={styles.container}>
             <LoadingOverlay visible={loading} />
-            <Text variant="headlineMedium" style={styles.title}>
-                Cadastro de Usuário
-            </Text>
-
             <Formik
                 initialValues={{ name: '', email: '', password: '', userType: '' }}
                 validationSchema={validationSchema}

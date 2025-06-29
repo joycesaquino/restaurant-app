@@ -6,10 +6,6 @@ export const styles = StyleSheet.create({
     backgroundColor: '#fff',
     flexGrow: 1,
   },
-  title: {
-    marginBottom: 20,
-    textAlign: 'center',
-  },
   sectionTitle: {
     fontWeight: 'bold',
     marginTop: 20,
@@ -43,5 +39,6 @@ export const styles = StyleSheet.create({
   },
   button: {
     marginTop: 24,
+    marginBottom: 40
   },
 });

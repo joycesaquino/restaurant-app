@@ -7,10 +7,6 @@ export const styles = StyleSheet.create({
     backgroundColor: '#fff',
     justifyContent: 'center',
   },
-  title: {
-    marginBottom: 24,
-    textAlign: 'center',
-  },
   menuButton: {
     marginBottom: 16,
   },

@@ -5,13 +5,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     backgroundColor: '#fff',
-  },
-  title: {
-    marginBottom: 24,
-    textAlign: 'center',
-  },
-  input: {
-    marginBottom: 16,
+    justifyContent: 'center',
   },
   imageButton: {
     marginBottom: 16,
