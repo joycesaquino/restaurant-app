@@ -37,7 +37,7 @@ export const styles = StyleSheet.create({
     marginBottom: 4,
   },
   price: {
-    color: '#1e88e5',
+    color: '#d32f2f',
     fontWeight: 'bold',
   },
   emptyText: {

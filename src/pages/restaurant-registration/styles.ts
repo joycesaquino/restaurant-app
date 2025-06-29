@@ -11,9 +11,6 @@ export const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 4,
   },
-  input: {
-    marginBottom: 12,
-  },
   ufLabel: {
     marginTop: 8,
     marginBottom: 4,
