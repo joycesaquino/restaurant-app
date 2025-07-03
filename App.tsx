@@ -16,7 +16,7 @@ export default function App() {
   return (
     <PaperProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Onboarding">
+        <Stack.Navigator initialRouteName="Login">
           <Stack.Screen
             name="Onboarding"
             component={Onboarding}
