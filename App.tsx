@@ -1,13 +1,13 @@
 import { Provider as PaperProvider } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Login from './src/pages/login';
-import Home from './src/pages/home';
-import UserRegistration from './src/pages/user-registration';
-import ProductRegistration from './src/pages/product-registration';
-import MenuList from './src/pages/menu-list';
-import RestaurantRegistration from './src/pages/restaurant-registration';
-import Onboarding from './src/pages/onboarding';
+import Login from './src/view/pages/login';
+import Home from './src/view/pages/home';
+import UserRegistration from './src/view/pages/user-registration';
+import ProductRegistration from './src/view/pages/product-registration';
+import MenuList from './src/view/pages/menu-list';
+import RestaurantRegistration from './src/view/pages/restaurant-registration';
+import Onboarding from './src/view/pages/onboarding';
 
 
 const Stack = createNativeStackNavigator();
