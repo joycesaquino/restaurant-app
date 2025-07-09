@@ -11,7 +11,9 @@ import debounce from 'lodash.debounce';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().min(6, 'Mínimo 6 caracteres').required('Informe o nome'),
-  cep: Yup.string().min(8, 'Mínimo 8 caracteres').max(8, 'Máximo 8 caracteres').required('Informe o CEP'),
+  cep: Yup.string()
+    .matches(/^\d{8}$/, 'CEP inválido. Deve conter 8 dígitos numéricos.')
+    .required('Informe o CEP'),
   street: Yup.string().required('Informe a rua'),
   number: Yup.number().required('Informe o número'),
   district: Yup.string().required('Informe o bairro'),

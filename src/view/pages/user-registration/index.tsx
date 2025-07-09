@@ -8,7 +8,13 @@ import { LoadingOverlay } from '../../components/loading-overlay';
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().min(6, 'Mínimo 6 caracteres').required('Informe o nome'),
-    email: Yup.string().email('Email inválido').required('Informe o email'),
+   email: Yup.string()
+       .email('Email inválido')
+       .matches(
+         /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+         'Email deve ter um domínio válido (ex: exemplo@dominio.com)'
+       )
+       .required('Informe o email'),
     password: Yup.string().min(6, 'Mínimo 6 caracteres').required('Informe a senha'),
     userType: Yup.string().required('Informe o tipo do usuário'),
 });

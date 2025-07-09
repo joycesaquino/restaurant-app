@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import { View, Image, Alert } from 'react-native';
 import { TextInput, Button, HelperText } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
-import { styles } from './styles';
+import { styles } from './styles'; // Seus estilos
 import * as Yup from 'yup';
 import { Formik } from 'formik';
-import { LoadingOverlay } from '../../components/loading-overlay';
+import { LoadingOverlay } from '../../components/loading-overlay'; // Seu componente de loading
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
+import { Product } from '../../../model/products';
+
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().min(6, 'Mínimo 6 caracteres').required('Informe o nome'),
@@ -35,17 +38,42 @@ export default function ProductRegistration() {
     }
   };
 
-  const handleCadastro = (values: any) => {
+  // A função saveProduct agora aceita um objeto Product tipado
+  const saveProduct = async (productData: Product) => {
+    try {
+      const existingProducts = await AsyncStorage.getItem('products');
+      let products: Product[] = existingProducts ? JSON.parse(existingProducts) : [];
+
+      products.push(productData);
+
+      await AsyncStorage.setItem('products', JSON.stringify(products));
+      console.log('Produto salvo com sucesso no AsyncStorage:', productData);
+      Alert.alert('Sucesso', 'Produto cadastrado com sucesso!');
+    } catch (error) {
+      console.error('Erro ao salvar o produto:', error);
+      Alert.alert('Erro', 'Houve um erro ao salvar o produto. Tente novamente.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCadastro = (values: any) => { // 'any' ainda é usado para 'values' vindo do Formik
     if (!imageUri) {
       Alert.alert('Erro', 'Selecione uma imagem para o produto.');
       return;
     }
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      console.log({ ...values, imageUri });
-      Alert.alert('Sucesso', 'Produto cadastrado com sucesso!');
-    }, 2000);
+
+    // Cria um objeto Product completo para salvar
+    const newProduct: Product = {
+      id: Date.now().toString(), // Gera um ID único baseado no timestamp
+      name: values.name,
+      description: values.description,
+      price: Number(values.price), // Converte o preço para número
+      imageUri: imageUri,
+    };
+
+    saveProduct(newProduct);
   };
 
   return (
@@ -115,4 +143,3 @@ export default function ProductRegistration() {
     </View>
   );
 }
-

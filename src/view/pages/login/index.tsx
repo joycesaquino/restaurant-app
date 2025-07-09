@@ -12,7 +12,13 @@ import * as Yup from 'yup';
 type Navigation = NativeStackNavigationProp<RootStackParamList>;
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string().email('Email inválido').required('Informe o email'),
+  email: Yup.string()
+    .email('Email inválido')
+    .matches(
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      'Email deve ter um domínio válido (ex: exemplo@dominio.com)'
+    )
+    .required('Informe o email'),
   password: Yup.string().min(6, 'Mínimo 6 caracteres').required('Informe a senha'),
 });
 
