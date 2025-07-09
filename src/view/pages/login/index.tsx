@@ -43,7 +43,8 @@ export default function Login() {
         return;
       }
 
-      navigation.navigate('Home'); // Redireciona sem mostrar alerta
+      await AsyncStorage.setItem('currentUser', JSON.stringify(userFound));
+      navigation.navigate('Home');
     } catch (error) {
       console.error('Erro no login:', error);
       Alert.alert('Erro', 'Erro inesperado. Tente novamente.');

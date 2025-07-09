@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, ScrollView, Alert } from 'react-native';
 import { TextInput, Button, Text, HelperText } from 'react-native-paper';
 import { MaskedTextInput } from 'react-native-mask-text';
@@ -8,6 +8,8 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { LoadingOverlay } from '../../components/loading-overlay';
 import debounce from 'lodash.debounce';
+import { useNavigation } from '@react-navigation/native';
+import { getCurrentUser } from '../../../utils/auth';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().min(6, 'Mínimo 6 caracteres').required('Informe o nome'),
@@ -31,6 +33,20 @@ const brazilianStates = [
 
 export default function RestaurantRegistration() {
   const [loading, setLoading] = useState(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    getCurrentUser().then(user => {
+      if (!user || user.userType !== 'Admin') {
+        Alert.alert('Acesso negado', 'Apenas administradores podem acessar esta tela.', [
+          { text: 'OK', onPress: () => navigation.goBack() },
+        ]);
+      } else {
+        setIsAdmin(true);
+      }
+    });
+  }, []);
 
   const handleSalvar = (values: any) => {
     setLoading(true);
@@ -41,26 +57,32 @@ export default function RestaurantRegistration() {
     }, 2000);
   };
 
+  if (!isAdmin) return null;
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <LoadingOverlay visible={loading} />
-
       <Formik
-        initialValues={{ name: '', cep: '', street: '', number: '', district: '', city: '', uf: '', cnpj: '' }}
+        initialValues={{
+          name: '', cep: '', street: '', number: '',
+          district: '', city: '', uf: '', cnpj: ''
+        }}
         validationSchema={validationSchema}
         onSubmit={(values) => handleSalvar(values)}
       >
-        {({ handleChange, handleBlur, handleSubmit, setFieldValue, values, errors, touched, isValid, dirty }) => {
+        {({
+          handleChange, handleBlur, handleSubmit, setFieldValue,
+          values, errors, touched, isValid, dirty
+        }) => {
           const debouncedSetCNPJ = React.useMemo(
-            () =>
-              debounce((value: string) => {
-                setFieldValue('cnpj', value);
-              }, 300),
+            () => debounce((value: string) => setFieldValue('cnpj', value), 300),
             [setFieldValue]
           );
+
           const handleSelect = (value: string) => {
             setFieldValue('uf', value);
           };
+
           return <>
             <TextInput
               label="Nome do Restaurante"
@@ -70,7 +92,6 @@ export default function RestaurantRegistration() {
               mode="outlined"
               error={touched.name && !!errors.name}
             />
-
             <HelperText type="error" visible={touched.name && !!errors.name}>
               {touched.name && errors.name}
             </HelperText>
@@ -97,7 +118,7 @@ export default function RestaurantRegistration() {
               onBlur={handleBlur('street')}
               mode="outlined"
               error={touched.street && !!errors.street}
-              disabled={true}
+              disabled
             />
             <HelperText type="error" visible={touched.street && !!errors.street}>
               {touched.street && errors.street}
@@ -123,7 +144,7 @@ export default function RestaurantRegistration() {
               onBlur={handleBlur('district')}
               mode="outlined"
               error={touched.district && !!errors.district}
-              disabled={true}
+              disabled
             />
             <HelperText type="error" visible={touched.district && !!errors.district}>
               {touched.district && errors.district}
@@ -136,7 +157,7 @@ export default function RestaurantRegistration() {
               onBlur={handleBlur('city')}
               mode="outlined"
               error={touched.city && !!errors.city}
-              disabled={true}
+              disabled
             />
             <HelperText type="error" visible={touched.city && !!errors.city}>
               {touched.city && errors.city}
@@ -190,8 +211,7 @@ export default function RestaurantRegistration() {
               Cadastrar Restaurante
             </Button>
           </>
-        }
-        }
+        }}
       </Formik>
     </ScrollView>
   );
