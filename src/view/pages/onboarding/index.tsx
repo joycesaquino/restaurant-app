@@ -11,7 +11,7 @@ export default function Onboarding({ navigation }: any) {
         source={require('../../../../assets/pizza.png')}
         style={styles.image}
       />
-      
+
       {/* Promo Phrase */}
       <Text style={styles.promoText}>
         Boa música e boa comida me fazem feliz.

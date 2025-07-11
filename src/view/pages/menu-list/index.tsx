@@ -1,16 +1,36 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { FlatList, Image, View, StyleSheet } from 'react-native';
-import { Card, Text, TextInput, ActivityIndicator } from 'react-native-paper';
+import { Card, Text, TextInput, ActivityIndicator, Appbar } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import { styles } from './styles';
 import { Product } from '../../../model/products';
+import { useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from '../../../../route-types';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+type Navigation = NativeStackNavigationProp<RootStackParamList>;
 
 export default function MenuList() {
   const [busca, setBusca] = useState('');
   const [produtos, setProdutos] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [allProducts, setAllProducts] = useState<Product[]>([]);
+
+  const navigation = useNavigation<Navigation>();
+      const handleLogout = () => {
+          navigation.replace('Login');
+      };
+
+    useEffect(() => {
+        navigation.setOptions({
+            headerRight: () => (
+                <Appbar.Action icon="logout" onPress={handleLogout} color="black" />
+            ),
+          
+        });
+    }, [navigation]);
+
 
   const loadProducts = useCallback(async () => {
     setLoading(true);
@@ -45,7 +65,7 @@ export default function MenuList() {
 
   const filtrarProdutos = (texto: string) => {
     setBusca(texto);
-    const filtrados = allProducts.filter((produto) => // Filtra de `allProducts`
+    const filtrados = allProducts.filter((produto) => 
       produto.name.toLowerCase().includes(texto.toLowerCase())
     );
     setProdutos(filtrados);
