@@ -30,7 +30,7 @@ export default function ProductSuccess() {
           {/* Success Icon */}
           <View style={styles.iconContainer}>
             <Image 
-              source={require('../../../../assets/pizza.png')} 
+              source={require('../../../../assets/logotipo.png')}
               style={styles.successIcon}
               resizeMode="contain"
             />
