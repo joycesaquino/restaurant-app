@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { FlatList, Image, View, StyleSheet } from 'react-native';
+import { FlatList, Image, View } from 'react-native';
 import { Card, Text, TextInput, ActivityIndicator, Appbar } from 'react-native-paper';
 import { getProducts } from '../../../controller/product-controller';
 import { useFocusEffect } from '@react-navigation/native';
