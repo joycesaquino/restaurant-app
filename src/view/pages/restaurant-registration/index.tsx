@@ -10,6 +10,7 @@ import { LoadingOverlay } from '../../components/loading-overlay';
 import debounce from 'lodash.debounce';
 import { useNavigation } from '@react-navigation/native';
 import { getCurrentUser } from '../../../utils/auth';
+import { useCep } from '../../../hooks/useCep';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().min(6, 'Mínimo 6 caracteres').required('Informe o nome'),
@@ -35,6 +36,7 @@ export default function RestaurantRegistration() {
   const [loading, setLoading] = useState(false);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const navigation = useNavigation();
+  const { fetchAddress, loading: cepLoading, error: cepError, clearError } = useCep();
 
   useEffect(() => {
     getCurrentUser().then(user => {
@@ -79,6 +81,27 @@ export default function RestaurantRegistration() {
             [setFieldValue]
           );
 
+          const debouncedFetchCep = React.useMemo(
+            () => debounce(async (cep: string) => {
+              if (cep.length === 8) {
+                clearError();
+                const address = await fetchAddress(cep);
+                if (address) {
+                  setFieldValue('street', address.street);
+                  setFieldValue('district', address.district);
+                  setFieldValue('city', address.city);
+                  setFieldValue('uf', address.uf);
+                }
+              }
+            }, 500),
+            [setFieldValue, fetchAddress, clearError]
+          );
+
+          const handleCepChange = (cep: string) => {
+            handleChange('cep')(cep);
+            debouncedFetchCep(cep);
+          };
+
           const handleSelect = (value: string) => {
             setFieldValue('uf', value);
           };
@@ -101,14 +124,18 @@ export default function RestaurantRegistration() {
             <TextInput
               label="CEP"
               value={values.cep}
-              onChangeText={handleChange('cep')}
+              onChangeText={handleCepChange}
               onBlur={handleBlur('cep')}
               mode="outlined"
               keyboardType="numeric"
-              error={touched.cep && !!errors.cep}
+              error={(touched.cep && !!errors.cep) || !!cepError}
+              right={cepLoading ? <TextInput.Icon icon="loading" /> : undefined}
             />
             <HelperText type="error" visible={touched.cep && !!errors.cep}>
               {touched.cep && errors.cep}
+            </HelperText>
+            <HelperText type="error" visible={!!cepError}>
+              {cepError}
             </HelperText>
 
             <TextInput
@@ -118,7 +145,7 @@ export default function RestaurantRegistration() {
               onBlur={handleBlur('street')}
               mode="outlined"
               error={touched.street && !!errors.street}
-              disabled
+              disabled={!values.street}
             />
             <HelperText type="error" visible={touched.street && !!errors.street}>
               {touched.street && errors.street}
@@ -144,7 +171,7 @@ export default function RestaurantRegistration() {
               onBlur={handleBlur('district')}
               mode="outlined"
               error={touched.district && !!errors.district}
-              disabled
+              disabled={!values.district}
             />
             <HelperText type="error" visible={touched.district && !!errors.district}>
               {touched.district && errors.district}
@@ -157,7 +184,7 @@ export default function RestaurantRegistration() {
               onBlur={handleBlur('city')}
               mode="outlined"
               error={touched.city && !!errors.city}
-              disabled
+              disabled={!values.city}
             />
             <HelperText type="error" visible={touched.city && !!errors.city}>
               {touched.city && errors.city}
@@ -169,7 +196,7 @@ export default function RestaurantRegistration() {
                 selectedValue={values.uf}
                 onValueChange={(value) => handleSelect(value)}
                 style={styles.picker}
-                enabled={false}
+                enabled={!!values.uf}
               >
                 <Picker.Item label="Selecione o estado" value="" />
                 {brazilianStates.map((estado) => (
