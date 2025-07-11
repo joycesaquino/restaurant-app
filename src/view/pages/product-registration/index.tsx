@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { View, Image, Alert, ScrollView } from 'react-native';
+import { View, Image, ScrollView } from 'react-native';
 import { TextInput, Button, HelperText, Card, Title, Appbar } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 import { styles } from './styles';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { LoadingOverlay } from '../../components/loading-overlay';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Product } from '../../../model/products';
 
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../../route-types';
 import { getCurrentUser } from '../../../utils/auth';
+import { addProduct } from '../../../controller/product-controller';
+import { showError } from '../../../utils/error-handler';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Informe o nome'),
@@ -43,9 +44,8 @@ export default function ProductRegistration() {
   useEffect(() => {
     getCurrentUser().then(user => {
       if (!user || user.userType !== 'Admin') {
-        Alert.alert('Acesso negado', 'Apenas administradores podem acessar esta tela.', [
-          { text: 'OK', onPress: () => navigation.goBack() },
-        ]);
+        showError('Acesso negado', 'Apenas administradores podem acessar esta tela.')
+        navigation.goBack();
       } else {
         setIsAdmin(true);
       }
@@ -57,7 +57,7 @@ export default function ProductRegistration() {
 
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
-      Alert.alert('Permissão necessária', 'Permita acesso às imagens para continuar.');
+      showError('Permissão necessária', 'Permita acesso às imagens para continuar.')
       return;
     }
 
@@ -73,14 +73,11 @@ export default function ProductRegistration() {
 
   const saveProduct = async (productData: Product) => {
     try {
-      const existingProducts = await AsyncStorage.getItem('products');
-      let products: Product[] = existingProducts ? JSON.parse(existingProducts) : [];
-      products.push(productData);
-      await AsyncStorage.setItem('products', JSON.stringify(products));
+      await addProduct(productData);
       navigation.navigate('ProductSuccess', { type: 'product' });
     } catch (error) {
       console.error('Erro ao salvar o produto:', error);
-      Alert.alert('Erro', 'Erro ao salvar. Tente novamente.');
+      showError('Erro', 'Erro ao salvar. Tente novamente.');
     } finally {
       setLoading(false);
     }
@@ -88,7 +85,7 @@ export default function ProductRegistration() {
 
   const handleCadastro = (values: any) => {
     if (!imageUri) {
-      Alert.alert('Erro', 'Selecione uma imagem para o produto.');
+      showError('Erro', 'Selecione uma imagem para o produto.')
       return;
     }
 

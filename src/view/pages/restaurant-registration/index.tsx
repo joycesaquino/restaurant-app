@@ -13,6 +13,8 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../../route-types';
 import { getCurrentUser } from '../../../utils/auth';
 import { useCep } from '../../../hooks/useCep';
+import { addRestaurant } from '../../../controller/restaurant-controller';
+import { showError } from '../../../utils/error-handler';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Informe o nome'),
@@ -57,22 +59,32 @@ export default function RestaurantRegistration() {
   useEffect(() => {
     getCurrentUser().then(user => {
       if (!user || user.userType !== 'Admin') {
-        Alert.alert('Acesso negado', 'Apenas administradores podem acessar esta tela.', [
-          { text: 'OK', onPress: () => navigation.goBack() },
-        ]);
+        showError('Acesso negado', 'Apenas administradores podem acessar esta tela.')
+        navigation.goBack();
       } else {
         setIsAdmin(true);
       }
     });
   }, []);
 
-  const handleSalvar = (values: any) => {
+  const handleSalvar = async (values: any) => {
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      console.log({ ...values });
+    try {
+      const newRestaurant = {
+        id: Date.now().toString(),
+        name: values.name,
+        address: `${values.street}, ${values.number} - ${values.district}, ${values.city} - ${values.uf}`,
+        cep: values.cep,
+        cnpj: values.cnpj,
+      };
+      await addRestaurant(newRestaurant);
       navigation.navigate('ProductSuccess', { type: 'restaurant' });
-    }, 2000);
+    } catch (error) {
+      console.error('Erro ao salvar restaurante:', error);
+      showError('Erro', 'Erro ao salvar restaurante. Tente novamente.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (!isAdmin) return null;
