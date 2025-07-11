@@ -15,7 +15,7 @@ import { RootStackParamList } from '../../../../route-types';
 import { getCurrentUser } from '../../../utils/auth';
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().min(6, 'Mínimo 6 caracteres').required('Informe o nome'),
+  name: Yup.string().required('Informe o nome'),
   description: Yup.string().required('Informe a descrição'),
   price: Yup.number().typeError('Informe um preço válido').required('Informe o preço'),
 });

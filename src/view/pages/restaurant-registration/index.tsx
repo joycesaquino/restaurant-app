@@ -15,7 +15,7 @@ import { getCurrentUser } from '../../../utils/auth';
 import { useCep } from '../../../hooks/useCep';
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().min(6, 'Mínimo 6 caracteres').required('Informe o nome'),
+  name: Yup.string().required('Informe o nome'),
   cep: Yup.string()
     .matches(/^\d{8}$/, 'CEP inválido. Deve conter 8 dígitos numéricos.')
     .required('Informe o CEP'),
