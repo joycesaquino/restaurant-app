@@ -28,4 +28,4 @@ export class CepError extends Error {
     this.name = 'CepError';
     this.type = config.type;
   }
-} 
+}
