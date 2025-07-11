@@ -10,6 +10,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Product } from '../../../model/products';
 
 import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../../../route-types';
 import { getCurrentUser } from '../../../utils/auth';
 
 const validationSchema = Yup.object().shape({
@@ -22,7 +24,7 @@ export default function ProductRegistration() {
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   useEffect(() => {
     getCurrentUser().then(user => {
@@ -61,9 +63,7 @@ export default function ProductRegistration() {
       let products: Product[] = existingProducts ? JSON.parse(existingProducts) : [];
       products.push(productData);
       await AsyncStorage.setItem('products', JSON.stringify(products));
-      Alert.alert('Sucesso', 'Produto cadastrado com sucesso!', [
-      { text: 'OK', onPress: () => navigation.goBack() },
-    ]);
+      navigation.navigate('ProductSuccess', { type: 'product' });
     } catch (error) {
       console.error('Erro ao salvar o produto:', error);
       Alert.alert('Erro', 'Erro ao salvar. Tente novamente.');
