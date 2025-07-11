@@ -9,13 +9,14 @@ import ProductSuccess from './src/view/pages/success';
 import MenuList from './src/view/pages/menu-list';
 import RestaurantRegistration from './src/view/pages/restaurant-registration';
 import Onboarding from './src/view/pages/onboarding';
+import { theme } from './src/theme/theme';
 
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <PaperProvider>
+    <PaperProvider theme={theme}>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Login">
           <Stack.Screen
