@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity, Image, Alert } from 'react-native';
-import { TextInput, Button, Text, HelperText } from 'react-native-paper';
+import { TextInput, Button, Text, HelperText, Card, Title } from 'react-native-paper';
 import { styles } from './styles';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -57,69 +57,79 @@ export default function Login() {
     <View style={styles.container}>
       <LoadingOverlay visible={loading} />
 
-      <Image
-        source={require('../../../../assets/logotipo.png')}
-        style={styles.logo}
-        resizeMode="contain"
-      />
+      <Card style={styles.card}>
+        <Card.Content style={styles.content}>
+          <Image
+            source={require('../../../../assets/logotipo.png')}
+            style={styles.logo}
+            resizeMode="contain"
+          />
 
-      <Formik
-        initialValues={{ email: '', password: '' }}
-        validationSchema={validationSchema}
-        onSubmit={handleLogin}
-      >
-        {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isValid, dirty }) => (
-          <>
-            <TextInput
-              label="Email"
-              value={values.email}
-              onChangeText={handleChange('email')}
-              onBlur={handleBlur('email')}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              mode="outlined"
-              error={touched.email && !!errors.email}
-            />
-            <HelperText type="error" visible={touched.email && !!errors.email}>
-              {errors.email}
-            </HelperText>
+          <Title style={styles.title}>Entrar</Title>
 
-            <TextInput
-              label="Senha"
-              value={values.password}
-              onChangeText={handleChange('password')}
-              onBlur={handleBlur('password')}
-              secureTextEntry
-              mode="outlined"
-              error={touched.password && !!errors.password}
-            />
-            <HelperText type="error" visible={touched.password && !!errors.password}>
-              {errors.password}
-            </HelperText>
+          <Formik
+            initialValues={{ email: '', password: '' }}
+            validationSchema={validationSchema}
+            onSubmit={handleLogin}
+          >
+            {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isValid, dirty }) => (
+              <>
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    label="Email"
+                    value={values.email}
+                    onChangeText={handleChange('email')}
+                    onBlur={handleBlur('email')}
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    mode="outlined"
+                    error={touched.email && !!errors.email}
+                  />
+                  <HelperText type="error" visible={touched.email && !!errors.email}>
+                    {errors.email}
+                  </HelperText>
+                </View>
 
-            <TouchableOpacity onPress={() => Alert.alert('Recuperar senha', 'Funcionalidade ainda não implementada.')}>
-              <Text style={styles.forgotPassword}>Esqueceu a senha?</Text>
-            </TouchableOpacity>
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    label="Senha"
+                    value={values.password}
+                    onChangeText={handleChange('password')}
+                    onBlur={handleBlur('password')}
+                    secureTextEntry
+                    mode="outlined"
+                    error={touched.password && !!errors.password}
+                  />
+                  <HelperText type="error" visible={touched.password && !!errors.password}>
+                    {errors.password}
+                  </HelperText>
+                </View>
 
-            <Button
-              mode="contained"
-              onPress={() => handleSubmit()}
-              buttonColor="#d32f2f"
-              style={styles.loginButton}
-              disabled={!isValid || !dirty}
-            >
-              Entrar
-            </Button>
-          </>
-        )}
-      </Formik>
+                <TouchableOpacity onPress={() => Alert.alert('Recuperar senha', 'Funcionalidade ainda não implementada.')}>
+                  <Text style={styles.forgotPassword}>Esqueceu a senha?</Text>
+                </TouchableOpacity>
 
-      <Text style={styles.footerText}>
-        Você não tem uma conta?{' '}
-        <Text style={styles.link} onPress={() => navigation.navigate('UserRegistration')}>
-          Crie uma
-        </Text>
-      </Text>
+                <Button
+                  mode="contained"
+                  onPress={() => handleSubmit()}
+                  buttonColor="#d32f2f"
+                  style={styles.loginButton}
+                  disabled={!isValid || !dirty}
+                >
+                  Entrar
+                </Button>
+
+                <Text style={styles.footerText}>
+                  Você não tem uma conta?{' '}
+                  <Text style={styles.link} onPress={() => navigation.navigate('UserRegistration')}>
+                    Crie uma
+                  </Text>
+                </Text>
+              </>
+            )}
+          </Formik>
+        </Card.Content>
+      </Card>
     </View>
   );
 }
