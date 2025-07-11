@@ -4,7 +4,7 @@ export type RootStackParamList = {
   UserRegistration: undefined;
   ProductRegistration: undefined;
   ProductSuccess: {
-    type: 'product' | 'restaurant';
+    type: 'product' | 'restaurant'| 'user';
     title?: string;
     message?: string;
   };

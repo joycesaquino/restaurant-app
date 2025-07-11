@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Image, Alert, ScrollView } from 'react-native';
-import { TextInput, Button, HelperText, Card, Title } from 'react-native-paper';
+import { TextInput, Button, HelperText, Card, Title, Appbar } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 import { styles } from './styles';
 import * as Yup from 'yup';
@@ -25,6 +25,20 @@ export default function ProductRegistration() {
   const [loading, setLoading] = useState(false);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const handleLogout = () => {
+    navigation.replace('Login');
+  };
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Appbar.Action icon="logout" onPress={handleLogout} color="black" />
+      ),
+
+    });
+  }, [navigation]);
+
 
   useEffect(() => {
     getCurrentUser().then(user => {
@@ -100,7 +114,7 @@ export default function ProductRegistration() {
         <Card style={styles.card}>
           <Card.Content style={styles.content}>
             <Title style={styles.title}>Cadastro de Produto</Title>
-            
+
             <Formik
               initialValues={{ name: '', description: '', price: '' }}
               validationSchema={validationSchema}
@@ -109,13 +123,13 @@ export default function ProductRegistration() {
               {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isValid, dirty }) => (
                 <>
                   <View style={styles.inputContainer}>
-                    <TextInput 
-                      label="Nome do prato" 
-                      value={values.name} 
-                      onChangeText={handleChange('name')} 
-                      onBlur={handleBlur('name')} 
-                      mode="outlined" 
-                      error={touched.name && !!errors.name} 
+                    <TextInput
+                      label="Nome do prato"
+                      value={values.name}
+                      onChangeText={handleChange('name')}
+                      onBlur={handleBlur('name')}
+                      mode="outlined"
+                      error={touched.name && !!errors.name}
                     />
                     <HelperText type="error" visible={touched.name && !!errors.name}>
                       {errors.name}
@@ -123,15 +137,15 @@ export default function ProductRegistration() {
                   </View>
 
                   <View style={styles.inputContainer}>
-                    <TextInput 
-                      label="Descrição" 
-                      value={values.description} 
-                      onChangeText={handleChange('description')} 
-                      onBlur={handleBlur('description')} 
-                      mode="outlined" 
-                      multiline 
-                      numberOfLines={4} 
-                      error={touched.description && !!errors.description} 
+                    <TextInput
+                      label="Descrição"
+                      value={values.description}
+                      onChangeText={handleChange('description')}
+                      onBlur={handleBlur('description')}
+                      mode="outlined"
+                      multiline
+                      numberOfLines={4}
+                      error={touched.description && !!errors.description}
                     />
                     <HelperText type="error" visible={touched.description && !!errors.description}>
                       {errors.description}
@@ -139,37 +153,37 @@ export default function ProductRegistration() {
                   </View>
 
                   <View style={styles.inputContainer}>
-                    <TextInput 
-                      label="Preço" 
-                      value={values.price} 
-                      onChangeText={handleChange('price')} 
-                      onBlur={handleBlur('price')} 
-                      mode="outlined" 
-                      keyboardType="decimal-pad" 
-                      error={touched.price && !!errors.price} 
+                    <TextInput
+                      label="Preço"
+                      value={values.price}
+                      onChangeText={handleChange('price')}
+                      onBlur={handleBlur('price')}
+                      mode="outlined"
+                      keyboardType="decimal-pad"
+                      error={touched.price && !!errors.price}
                     />
                     <HelperText type="error" visible={touched.price && !!errors.price}>
                       {errors.price}
                     </HelperText>
                   </View>
 
-                  <Button 
-                    mode="outlined" 
-                    onPress={escolherImagem} 
-                    style={styles.imageButton} 
+                  <Button
+                    mode="outlined"
+                    onPress={escolherImagem}
+                    style={styles.imageButton}
                     textColor="#d32f2f"
                     icon="camera"
                   >
                     {imageUri ? 'Trocar Imagem' : 'Selecionar Imagem'}
                   </Button>
-                  
+
                   {imageUri && <Image source={{ uri: imageUri }} style={styles.imagePreview} />}
 
-                  <Button 
-                    mode="contained" 
-                    onPress={() => handleSubmit()} 
-                    style={styles.submitButton} 
-                    buttonColor="#d32f2f" 
+                  <Button
+                    mode="contained"
+                    onPress={() => handleSubmit()}
+                    style={styles.submitButton}
+                    buttonColor="#d32f2f"
                     disabled={!isValid || !dirty}
                   >
                     Cadastrar Produto
