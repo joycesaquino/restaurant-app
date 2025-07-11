@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Alert } from 'react-native';
-import { TextInput, Button, Menu, Divider, HelperText } from 'react-native-paper';
+import { TextInput, Button, Menu, Divider, HelperText, Card, Title } from 'react-native-paper';
 import { styles } from './styles';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
@@ -74,91 +74,103 @@ export default function UserRegistration() {
   return (
     <View style={styles.container}>
       <LoadingOverlay visible={loading} />
-      <Formik
-        initialValues={{ name: '', email: '', password: '', userType: '' }}
-        validationSchema={validationSchema}
-        onSubmit={handleSubmitUser}
-      >
-        {({ handleChange, handleBlur, handleSubmit, setFieldValue, values, errors, touched, isValid, dirty }) => {
-          const handleSelect = (value: 'Cliente' | 'Admin') => {
-            setFieldValue('userType', value);
-            setMenuVisible(false);
-          };
+      <Card style={styles.card}>
+        <Card.Content style={styles.content}>
+          <Title style={styles.title}>Cadastro de Usuário</Title>
+          
+          <Formik
+            initialValues={{ name: '', email: '', password: '', userType: '' }}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmitUser}
+          >
+            {({ handleChange, handleBlur, handleSubmit, setFieldValue, values, errors, touched, isValid, dirty }) => {
+              const handleSelect = (value: 'Cliente' | 'Admin') => {
+                setFieldValue('userType', value);
+                setMenuVisible(false);
+              };
 
-          return <>
-            <TextInput
-              label="Nome completo"
-              value={values.name}
-              onChangeText={handleChange('name')}
-              onBlur={handleBlur('name')}
-              mode="outlined"
-              error={touched.name && !!errors.name}
-            />
-            <HelperText type="error" visible={touched.name && !!errors.name}>
-              {errors.name}
-            </HelperText>
+              return <>
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    label="Nome completo"
+                    value={values.name}
+                    onChangeText={handleChange('name')}
+                    onBlur={handleBlur('name')}
+                    mode="outlined"
+                    error={touched.name && !!errors.name}
+                  />
+                  <HelperText type="error" visible={touched.name && !!errors.name}>
+                    {errors.name}
+                  </HelperText>
+                </View>
 
-            <TextInput
-              label="Email"
-              value={values.email}
-              onChangeText={handleChange('email')}
-              onBlur={handleBlur('email')}
-              mode="outlined"
-              keyboardType="email-address"
-              autoCapitalize="none"
-              error={touched.email && !!errors.email}
-            />
-            <HelperText type="error" visible={touched.email && !!errors.email}>
-              {errors.email}
-            </HelperText>
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    label="Email"
+                    value={values.email}
+                    onChangeText={handleChange('email')}
+                    onBlur={handleBlur('email')}
+                    mode="outlined"
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    error={touched.email && !!errors.email}
+                  />
+                  <HelperText type="error" visible={touched.email && !!errors.email}>
+                    {errors.email}
+                  </HelperText>
+                </View>
 
-            <TextInput
-              label="Senha"
-              value={values.password}
-              onChangeText={handleChange('password')}
-              onBlur={handleBlur('password')}
-              mode="outlined"
-              secureTextEntry
-              error={touched.password && !!errors.password}
-            />
-            <HelperText type="error" visible={touched.password && !!errors.password}>
-              {errors.password}
-            </HelperText>
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    label="Senha"
+                    value={values.password}
+                    onChangeText={handleChange('password')}
+                    onBlur={handleBlur('password')}
+                    mode="outlined"
+                    secureTextEntry
+                    error={touched.password && !!errors.password}
+                  />
+                  <HelperText type="error" visible={touched.password && !!errors.password}>
+                    {errors.password}
+                  </HelperText>
+                </View>
 
-            <Menu
-              visible={menuVisible}
-              onDismiss={() => setMenuVisible(false)}
-              anchor={
-                <Button
-                  mode="outlined"
-                  onPress={() => setMenuVisible(true)}
-                  style={styles.menuButton}
-                  textColor="#d32f2f"
+                <Menu
+                  visible={menuVisible}
+                  onDismiss={() => setMenuVisible(false)}
+                  anchor={
+                    <Button
+                      mode="outlined"
+                      onPress={() => setMenuVisible(true)}
+                      style={styles.menuButton}
+                      textColor="#d32f2f"
+                    >
+                      {values.userType || 'Selecionar Tipo de Usuário'}
+                    </Button>
+                  }
                 >
-                  {values.userType || 'Selecionar Tipo de Usuário'}
-                </Button>
-              }
-            >
-              <Menu.Item onPress={() => handleSelect('Cliente')} title="Cliente" />
-              <Divider />
-              <Menu.Item onPress={() => handleSelect('Admin')} title="Admin" />
-            </Menu>
-            <HelperText type="error" visible={touched.userType && !!errors.userType}>
-              {errors.userType}
-            </HelperText>
+                  <Menu.Item onPress={() => handleSelect('Cliente')} title="Cliente" />
+                  <Divider />
+                  <Menu.Item onPress={() => handleSelect('Admin')} title="Admin" />
+                </Menu>
+                <HelperText type="error" visible={touched.userType && !!errors.userType}>
+                  {errors.userType}
+                </HelperText>
 
-            <Button
-              mode="contained"
-              onPress={() => handleSubmit()}
-              style={styles.submitButton}
-              buttonColor="#d32f2f"
-              disabled={!isValid || !dirty}
-            >
-              Cadastrar
-            </Button>
-          </>
-        }}
-      </Formik>
+                <Button
+                  mode="contained"
+                  onPress={() => handleSubmit()}
+                  style={styles.submitButton}
+                  buttonColor="#d32f2f"
+                  disabled={!isValid || !dirty}
+                >
+                  Cadastrar
+                </Button>
+              </>
+            }}
+          </Formik>
+        </Card.Content>
+      </Card>
     </View>
   );
 }
