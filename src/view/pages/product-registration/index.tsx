@@ -61,7 +61,9 @@ export default function ProductRegistration() {
       let products: Product[] = existingProducts ? JSON.parse(existingProducts) : [];
       products.push(productData);
       await AsyncStorage.setItem('products', JSON.stringify(products));
-      Alert.alert('Sucesso', 'Produto cadastrado com sucesso!');
+      Alert.alert('Sucesso', 'Produto cadastrado com sucesso!', [
+      { text: 'OK', onPress: () => navigation.goBack() },
+    ]);
     } catch (error) {
       console.error('Erro ao salvar o produto:', error);
       Alert.alert('Erro', 'Erro ao salvar. Tente novamente.');
