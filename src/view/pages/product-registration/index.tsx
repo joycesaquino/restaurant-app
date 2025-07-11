@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Image, Alert } from 'react-native';
-import { TextInput, Button, HelperText } from 'react-native-paper';
+import { View, Image, Alert, ScrollView } from 'react-native';
+import { TextInput, Button, HelperText, Card, Title } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 import { styles } from './styles';
 import * as Yup from 'yup';
@@ -96,29 +96,90 @@ export default function ProductRegistration() {
   return (
     <View style={styles.container}>
       <LoadingOverlay visible={loading} />
-      <Formik
-        initialValues={{ name: '', description: '', price: '' }}
-        validationSchema={validationSchema}
-        onSubmit={handleCadastro}
-      >
-        {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isValid, dirty }) => (
-          <>
-            <TextInput label="Nome do prato" value={values.name} onChangeText={handleChange('name')} onBlur={handleBlur('name')} mode="outlined" error={touched.name && !!errors.name} />
-            <HelperText type="error" visible={touched.name && !!errors.name}>{errors.name}</HelperText>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <Card style={styles.card}>
+          <Card.Content style={styles.content}>
+            <Title style={styles.title}>Cadastro de Produto</Title>
+            
+            <Formik
+              initialValues={{ name: '', description: '', price: '' }}
+              validationSchema={validationSchema}
+              onSubmit={handleCadastro}
+            >
+              {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isValid, dirty }) => (
+                <>
+                  <View style={styles.inputContainer}>
+                    <TextInput 
+                      label="Nome do prato" 
+                      value={values.name} 
+                      onChangeText={handleChange('name')} 
+                      onBlur={handleBlur('name')} 
+                      mode="outlined" 
+                      error={touched.name && !!errors.name} 
+                    />
+                    <HelperText type="error" visible={touched.name && !!errors.name}>
+                      {errors.name}
+                    </HelperText>
+                  </View>
 
-            <TextInput label="Descrição" value={values.description} onChangeText={handleChange('description')} onBlur={handleBlur('description')} mode="outlined" multiline numberOfLines={4} error={touched.description && !!errors.description} />
-            <HelperText type="error" visible={touched.description && !!errors.description}>{errors.description}</HelperText>
+                  <View style={styles.inputContainer}>
+                    <TextInput 
+                      label="Descrição" 
+                      value={values.description} 
+                      onChangeText={handleChange('description')} 
+                      onBlur={handleBlur('description')} 
+                      mode="outlined" 
+                      multiline 
+                      numberOfLines={4} 
+                      error={touched.description && !!errors.description} 
+                    />
+                    <HelperText type="error" visible={touched.description && !!errors.description}>
+                      {errors.description}
+                    </HelperText>
+                  </View>
 
-            <TextInput label="Preço" value={values.price} onChangeText={handleChange('price')} onBlur={handleBlur('price')} mode="outlined" keyboardType="decimal-pad" error={touched.price && !!errors.price} />
-            <HelperText type="error" visible={touched.price && !!errors.price}>{errors.price}</HelperText>
+                  <View style={styles.inputContainer}>
+                    <TextInput 
+                      label="Preço" 
+                      value={values.price} 
+                      onChangeText={handleChange('price')} 
+                      onBlur={handleBlur('price')} 
+                      mode="outlined" 
+                      keyboardType="decimal-pad" 
+                      error={touched.price && !!errors.price} 
+                    />
+                    <HelperText type="error" visible={touched.price && !!errors.price}>
+                      {errors.price}
+                    </HelperText>
+                  </View>
 
-            <Button mode="outlined" onPress={escolherImagem} style={styles.imageButton} textColor="#d32f2f">{imageUri ? 'Trocar Imagem' : 'Selecionar Imagem'}</Button>
-            {imageUri && <Image source={{ uri: imageUri }} style={styles.imagePreview} />}
+                  <Button 
+                    mode="outlined" 
+                    onPress={escolherImagem} 
+                    style={styles.imageButton} 
+                    textColor="#d32f2f"
+                    icon="camera"
+                  >
+                    {imageUri ? 'Trocar Imagem' : 'Selecionar Imagem'}
+                  </Button>
+                  
+                  {imageUri && <Image source={{ uri: imageUri }} style={styles.imagePreview} />}
 
-            <Button mode="contained" onPress={() => handleSubmit()} style={styles.submitButton} buttonColor="#d32f2f" disabled={!isValid || !dirty}>Cadastrar Produto</Button>
-          </>
-        )}
-      </Formik>
+                  <Button 
+                    mode="contained" 
+                    onPress={() => handleSubmit()} 
+                    style={styles.submitButton} 
+                    buttonColor="#d32f2f" 
+                    disabled={!isValid || !dirty}
+                  >
+                    Cadastrar Produto
+                  </Button>
+                </>
+              )}
+            </Formik>
+          </Card.Content>
+        </Card>
+      </ScrollView>
     </View>
   );
 }

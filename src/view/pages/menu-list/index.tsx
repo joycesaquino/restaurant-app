@@ -62,30 +62,32 @@ export default function MenuList() {
 
   return (
     <View style={styles.container}>
-      <TextInput
-        placeholder="Pesquisar produto pelo nome"
-        value={busca}
-        onChangeText={filtrarProdutos}
-        mode="outlined"
-        style={styles.input}
-        left={<TextInput.Icon icon="magnify" />}
-      />
+      <View style={styles.searchContainer}>
+        <TextInput
+          placeholder="Pesquisar produto pelo nome"
+          value={busca}
+          onChangeText={filtrarProdutos}
+          mode="outlined"
+          style={styles.input}
+          left={<TextInput.Icon icon="magnify" />}
+        />
+      </View>
 
       <FlatList
         data={produtos}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <Card style={styles.card}>
-            <View style={styles.row}>
-              {/* Use item.imageUri conforme definido na interface Product */}
-              <Image source={{ uri: item.imageUri }} style={styles.image} />
-              <View style={styles.details}>
-                <Text style={styles.name}>{item.name}</Text>
-                <Text style={styles.description}>{item.description}</Text>
-                {/* Formata o preço para exibição */}
-                <Text style={styles.price}>R$ {item.price.toFixed(2).replace('.', ',')}</Text>
+            <Card.Content style={styles.cardContent}>
+              <View style={styles.row}>
+                <Image source={{ uri: item.imageUri }} style={styles.image} />
+                <View style={styles.details}>
+                  <Text style={styles.name}>{item.name}</Text>
+                  <Text style={styles.description}>{item.description}</Text>
+                  <Text style={styles.price}>R$ {item.price.toFixed(2).replace('.', ',')}</Text>
+                </View>
               </View>
-            </View>
+            </Card.Content>
           </Card>
         )}
         ListEmptyComponent={<Text style={styles.emptyText}>Nenhum produto encontrado.</Text>}
