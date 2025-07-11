@@ -8,7 +8,6 @@ import ProductRegistration from './src/view/pages/product-registration';
 import ProductSuccess from './src/view/pages/success';
 import MenuList from './src/view/pages/menu-list';
 import RestaurantRegistration from './src/view/pages/restaurant-registration';
-import Onboarding from './src/view/pages/onboarding';
 import { theme } from './src/theme/theme';
 import ErrorDialog from './src/view/components/error-dialog';
 
@@ -20,11 +19,6 @@ export default function App() {
     <PaperProvider theme={theme}>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Login">
-          <Stack.Screen
-            name="Onboarding"
-            component={Onboarding}
-            options={{ headerShown: false }}
-          />
           <Stack.Screen
             name="Login"
             component={Login}

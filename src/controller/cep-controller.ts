@@ -83,7 +83,6 @@ export class CepService {
   }
 }
 
-// Factory function for easier testing and mocking
 export const cepService = {
   fetchAddress: (cep: string) => CepService.fetchAddress(cep),
 }; 

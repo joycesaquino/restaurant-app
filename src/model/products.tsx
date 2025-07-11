@@ -2,8 +2,8 @@ export interface Product {
   id: string;
   name: string;
   description: string;
-  price: number; // Recomendo usar number para o preço e formatar na exibição
-  imageUri: string; // Nome da propriedade que você está usando para salvar a URI da imagem
+  price: number;
+  imageUri: string;
 }
 
 
@@ -12,7 +12,7 @@ export const initialProducts: Product[] = [
         id: '1',
         name: 'Pizza Margherita',
         description: 'Molho de tomate, mussarela e manjericão fresco.',
-        price: 35.00, // Preço como número
+        price: 35.00,
         imageUri: 'https://laticiniosbomdestino.com.br/2016/wp-content/uploads/2023/03/pizza-marguerita-com-mozzarella-de-bufala-bom-destino-scaled.jpg',
     },
     {
