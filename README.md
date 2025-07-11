@@ -60,8 +60,10 @@ Este é um projeto desenvolvido como parte do **Trabalho Prático da     discipl
 - acesso na porta http://localhost:8081/ , via qr code ou endereço de IP na rede local  exp://192.168.68.{..}:8081
 
 ---
+O projeto foi feito de forma colaborativa no repositório principal https://github.com/AllissonFilipe/restaurant-app.git
+**Grupo:** Allison Felipe, Aryel Penido e Joyce Aquino
 
-**Aluno:** [Seu Nome Aqui]  
-**Curso:** [Nome do Curso]  
+**Aluno:** Joyce Aquino  
+**Curso:** Arquitetura de Software Distribuído  
 **Professor:** Fernando Pereira  
 **Entrega Individual - Trabalho Prático: App Mobile - Cardápio de Restaurante**
