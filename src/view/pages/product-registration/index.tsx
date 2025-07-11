@@ -13,6 +13,8 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../../route-types';
 import { getCurrentUser } from '../../../utils/auth';
+import { addProduct } from '../../../controller/product-controller';
+import { showError } from '../../../utils/error-handler';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Informe o nome'),
@@ -73,14 +75,11 @@ export default function ProductRegistration() {
 
   const saveProduct = async (productData: Product) => {
     try {
-      const existingProducts = await AsyncStorage.getItem('products');
-      let products: Product[] = existingProducts ? JSON.parse(existingProducts) : [];
-      products.push(productData);
-      await AsyncStorage.setItem('products', JSON.stringify(products));
+      await addProduct(productData);
       navigation.navigate('ProductSuccess', { type: 'product' });
     } catch (error) {
       console.error('Erro ao salvar o produto:', error);
-      Alert.alert('Erro', 'Erro ao salvar. Tente novamente.');
+      showError('Erro', 'Erro ao salvar. Tente novamente.');
     } finally {
       setLoading(false);
     }

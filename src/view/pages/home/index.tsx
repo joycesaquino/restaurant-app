@@ -16,7 +16,7 @@ export default function Home() {
 
     useEffect(() => {
         navigation.setOptions({
-            headerLeft: () => (
+            headerRight: () => (
                 <Appbar.Action icon="logout" onPress={handleLogout} color="black" />
             ),
             headerTitle: 'Menu Principal',

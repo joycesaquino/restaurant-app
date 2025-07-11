@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
-import { View, Alert } from 'react-native';
+import { View } from 'react-native';
 import { TextInput, Button, Menu, Divider, HelperText, Card, Title } from 'react-native-paper';
 import { styles } from './styles';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { LoadingOverlay } from '../../components/loading-overlay';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { User } from '../../../model/user';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../../route-types';
+import { addUser } from '../../../controller/user-controller';
+import { showError } from '../../../utils/error-handler';
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().min(6, 'Mínimo 6 caracteres').required('Informe o nome'),
@@ -29,27 +30,6 @@ export default function UserRegistration() {
     const [menuVisible, setMenuVisible] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const saveUser = async (userData: User) => {
-        try {
-            const existingUsers = await AsyncStorage.getItem('users');
-            let users: User[] = existingUsers ? JSON.parse(existingUsers) : [];
-
-            const emailExists = users.some(user => user.email === userData.email);
-            if (emailExists) {
-                Alert.alert('Erro no Cadastro', 'Este email já está cadastrado. Por favor, use outro email.');
-                return false;
-            }
-
-            users.push(userData);
-            await AsyncStorage.setItem('users', JSON.stringify(users));
-            return true;
-        } catch (error) {
-            console.error('Erro ao salvar o usuário:', error);
-            Alert.alert('Erro', 'Houve um erro ao salvar o usuário. Tente novamente.');
-            return false;
-        }
-    };
-
     const handleSubmitUser = async (values: any, { resetForm }: any) => {
         setLoading(true);
 
@@ -61,17 +41,19 @@ export default function UserRegistration() {
             userType: values.userType,
         };
 
-        const success = await saveUser(newUser);
-
-        if (success) {
-            resetForm();
-            navigation.navigate('ProductSuccess', {
-                type: 'user',
-                title: 'Usuário Cadastrado!',
-                message: `O usuário "${values.name}" foi cadastrado como ${values.userType} com sucesso e já pode acessar o sistema.`, // Mensagem detalhada
-            });
+        const result = await addUser(newUser);
+        if (typeof result === 'string') {
+            showError('Erro no Cadastro', result);
+            setLoading(false);
+            return;
         }
-        setLoading(false); 
+        resetForm();
+        navigation.navigate('ProductSuccess', {
+            type: 'user',
+            title: 'Usuário Cadastrado!',
+            message: `O usuário "${values.name}" foi cadastrado como ${values.userType} com sucesso e já pode acessar o sistema.`,
+        });
+        setLoading(false);
     };
 
     return (

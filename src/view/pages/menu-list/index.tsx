@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { FlatList, Image, View, StyleSheet } from 'react-native';
 import { Card, Text, TextInput, ActivityIndicator, Appbar } from 'react-native-paper';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getProducts } from '../../../controller/product-controller';
 import { useFocusEffect } from '@react-navigation/native';
 import { styles } from './styles';
 import { Product } from '../../../model/products';
@@ -35,21 +35,15 @@ export default function MenuList() {
   const loadProducts = useCallback(async () => {
     setLoading(true);
     try {
-      const storedProducts = await AsyncStorage.getItem('products');
-      if (storedProducts !== null) {
-        const parsedProducts: Product[] = JSON.parse(storedProducts);
-        const productsWithIds = parsedProducts.map(p => ({
-          ...p,
-          id: p.id || `${p.name}-${Math.random().toString(36).substring(2, 9)}`,
-        }));
-        setAllProducts(productsWithIds);
-        setProdutos(productsWithIds);
-      } else {
-        setAllProducts([]);
-        setProdutos([]);
-      }
+      const products = await getProducts();
+      const productsWithIds = products.map(p => ({
+        ...p,
+        id: p.id || `${p.name}-${Math.random().toString(36).substring(2, 9)}`,
+      }));
+      setAllProducts(productsWithIds);
+      setProdutos(productsWithIds);
     } catch (error) {
-      console.error('Erro ao carregar produtos do AsyncStorage:', error);
+      console.error('Erro ao carregar produtos:', error);
     } finally {
       setLoading(false);
     }

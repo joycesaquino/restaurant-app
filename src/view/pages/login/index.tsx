@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity, Image, Alert } from 'react-native';
+import { View, TouchableOpacity, Image } from 'react-native';
 import { TextInput, Button, Text, HelperText, Card, Title } from 'react-native-paper';
 import { styles } from './styles';
 import { useNavigation } from '@react-navigation/native';
@@ -7,19 +7,11 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../../route-types';
 import { LoadingOverlay } from '../../components/loading-overlay';
 import { Formik } from 'formik';
-import * as Yup from 'yup';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { User } from '../../../model/user';
+import { login as loginController } from '../../../controller/login-controller';
+import { loginValidationSchema } from '../../../utils/validation';
+import { showError } from '../../../utils/error-handler';
 
 type Navigation = NativeStackNavigationProp<RootStackParamList>;
-
-const validationSchema = Yup.object().shape({
-  email: Yup.string()
-    .email('Email inválido')
-    .matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, 'Email inválido')
-    .required('Informe o email'),
-  password: Yup.string().min(6, 'Mínimo 6 caracteres').required('Informe a senha'),
-});
 
 export default function Login() {
   const [loading, setLoading] = useState(false);
@@ -28,26 +20,14 @@ export default function Login() {
   const handleLogin = async (values: { email: string; password: string }) => {
     setLoading(true);
     try {
-      const storedUsers = await AsyncStorage.getItem('users');
-      const users: User[] = storedUsers ? JSON.parse(storedUsers) : [];
-
-      const userFound = users.find(user => user.email === values.email);
-
-      if (!userFound) {
-        Alert.alert('Erro de Login', 'Email não cadastrado.');
+      const result = await loginController(values.email, values.password);
+      if (typeof result === 'string') {
+        showError('Erro de Login', result);
         return;
       }
-
-      if (userFound.password !== values.password) {
-        Alert.alert('Erro de Login', 'Senha incorreta.');
-        return;
-      }
-
-      await AsyncStorage.setItem('currentUser', JSON.stringify(userFound));
       navigation.navigate('Home');
     } catch (error) {
-      console.error('Erro no login:', error);
-      Alert.alert('Erro', 'Erro inesperado. Tente novamente.');
+      showError('Erro', 'Erro inesperado. Tente novamente.');
     } finally {
       setLoading(false);
     }
@@ -69,7 +49,7 @@ export default function Login() {
 
           <Formik
             initialValues={{ email: '', password: '' }}
-            validationSchema={validationSchema}
+            validationSchema={loginValidationSchema}
             onSubmit={handleLogin}
           >
             {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isValid, dirty }) => (
@@ -105,7 +85,7 @@ export default function Login() {
                   </HelperText>
                 </View>
 
-                <TouchableOpacity onPress={() => Alert.alert('Recuperar senha', 'Funcionalidade ainda não implementada.')}>
+                <TouchableOpacity onPress={() => showError('Recuperar senha', 'Funcionalidade ainda não implementada.')}>
                   <Text style={styles.forgotPassword}>Esqueceu a senha?</Text>
                 </TouchableOpacity>
 

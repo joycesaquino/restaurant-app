@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { Address, CepError } from '../model/cep';
-import { cepService } from '../services/cep';
+import { cepService } from '../controller/cep-controller';
 
 interface UseCepState {
   loading: boolean;
