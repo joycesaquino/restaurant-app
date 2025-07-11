@@ -63,7 +63,11 @@ Este é um projeto desenvolvido como parte do **Trabalho Prático da     discipl
 O projeto foi feito de forma colaborativa no repositório principal https://github.com/AllissonFilipe/restaurant-app.git
 
 **Grupo:** Allison Felipe, Aryel Penido e Joyce Aquino
+
 **Aluno:** Joyce Aquino  
+
 **Curso:** Arquitetura de Software Distribuído  
+
 **Professor:** Fernando Pereira  
+
 **Entrega Individual - Trabalho Prático: App Mobile - Cardápio de Restaurante**
