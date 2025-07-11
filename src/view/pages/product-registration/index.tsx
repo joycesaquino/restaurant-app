@@ -63,7 +63,7 @@ export default function ProductRegistration() {
       let products: Product[] = existingProducts ? JSON.parse(existingProducts) : [];
       products.push(productData);
       await AsyncStorage.setItem('products', JSON.stringify(products));
-      navigation.navigate('ProductSuccess');
+      navigation.navigate('ProductSuccess', { type: 'product' });
     } catch (error) {
       console.error('Erro ao salvar o produto:', error);
       Alert.alert('Erro', 'Erro ao salvar. Tente novamente.');

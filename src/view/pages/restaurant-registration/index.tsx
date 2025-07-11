@@ -9,6 +9,8 @@ import { Formik } from 'formik';
 import { LoadingOverlay } from '../../components/loading-overlay';
 import debounce from 'lodash.debounce';
 import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../../../route-types';
 import { getCurrentUser } from '../../../utils/auth';
 import { useCep } from '../../../hooks/useCep';
 
@@ -35,7 +37,7 @@ const brazilianStates = [
 export default function RestaurantRegistration() {
   const [loading, setLoading] = useState(false);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { fetchAddress, loading: cepLoading, error: cepError, clearError } = useCep();
 
   useEffect(() => {
@@ -55,7 +57,7 @@ export default function RestaurantRegistration() {
     setTimeout(() => {
       setLoading(false);
       console.log({ ...values });
-      Alert.alert('Sucesso', 'Restaurante cadastrado com sucesso!');
+      navigation.navigate('ProductSuccess', { type: 'restaurant' });
     }, 2000);
   };
 

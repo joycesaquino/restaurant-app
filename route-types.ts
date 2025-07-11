@@ -3,7 +3,11 @@ export type RootStackParamList = {
   Home: undefined;
   UserRegistration: undefined;
   ProductRegistration: undefined;
-  ProductSuccess: undefined;
+  ProductSuccess: {
+    type: 'product' | 'restaurant';
+    title?: string;
+    message?: string;
+  };
   MenuList: undefined;
   RestaurantRegistration: undefined;
   Onboarding: undefined;

@@ -5,7 +5,7 @@ import Login from './src/view/pages/login';
 import Home from './src/view/pages/home';
 import UserRegistration from './src/view/pages/user-registration';
 import ProductRegistration from './src/view/pages/product-registration';
-import ProductSuccess from './src/view/pages/product-success';
+import ProductSuccess from './src/view/pages/success';
 import MenuList from './src/view/pages/menu-list';
 import RestaurantRegistration from './src/view/pages/restaurant-registration';
 import Onboarding from './src/view/pages/onboarding';
@@ -45,7 +45,7 @@ export default function App() {
           <Stack.Screen
             name="ProductSuccess"
             component={ProductSuccess}
-            options={{ title: 'Produto Cadastrado', headerBackVisible: false }}
+            options={{ title: 'Cadastro Concluído', headerBackVisible: false }}
           />
 
           <Stack.Screen
