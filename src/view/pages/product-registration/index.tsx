@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Image, Alert, ScrollView } from 'react-native';
+import { View, Image, ScrollView } from 'react-native';
 import { TextInput, Button, HelperText, Card, Title, Appbar } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 import { styles } from './styles';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { LoadingOverlay } from '../../components/loading-overlay';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Product } from '../../../model/products';
 
 import { useNavigation } from '@react-navigation/native';
@@ -45,9 +44,8 @@ export default function ProductRegistration() {
   useEffect(() => {
     getCurrentUser().then(user => {
       if (!user || user.userType !== 'Admin') {
-        Alert.alert('Acesso negado', 'Apenas administradores podem acessar esta tela.', [
-          { text: 'OK', onPress: () => navigation.goBack() },
-        ]);
+        showError('Acesso negado', 'Apenas administradores podem acessar esta tela.')
+        navigation.goBack();
       } else {
         setIsAdmin(true);
       }
@@ -59,7 +57,7 @@ export default function ProductRegistration() {
 
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
-      Alert.alert('Permissão necessária', 'Permita acesso às imagens para continuar.');
+      showError('Permissão necessária', 'Permita acesso às imagens para continuar.')
       return;
     }
 
@@ -87,7 +85,7 @@ export default function ProductRegistration() {
 
   const handleCadastro = (values: any) => {
     if (!imageUri) {
-      Alert.alert('Erro', 'Selecione uma imagem para o produto.');
+      showError('Erro', 'Selecione uma imagem para o produto.')
       return;
     }
 

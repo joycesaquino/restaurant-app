@@ -10,6 +10,7 @@ import MenuList from './src/view/pages/menu-list';
 import RestaurantRegistration from './src/view/pages/restaurant-registration';
 import Onboarding from './src/view/pages/onboarding';
 import { theme } from './src/theme/theme';
+import ErrorDialog from './src/view/components/error-dialog';
 
 
 const Stack = createNativeStackNavigator();
@@ -24,43 +25,36 @@ export default function App() {
             component={Onboarding}
             options={{ headerShown: false }}
           />
-
           <Stack.Screen
             name="Login"
             component={Login}
             options={{ headerShown: false }}
           />
-
           <Stack.Screen
             name="Home"
             component={Home}
             options={{ title: 'Entre na tela inicial' }}
           />
-
           <Stack.Screen
             name="ProductRegistration"
             component={ProductRegistration}
             options={{ title: 'Cadastre um produto' }}
           />
-
           <Stack.Screen
             name="ProductSuccess"
             component={ProductSuccess}
             options={{ title: 'Cadastro Concluído', headerBackVisible: false }}
           />
-
           <Stack.Screen
             name="UserRegistration"
             component={UserRegistration}
             options={{ title: 'Cadastre um usuário' }}
           />
-
           <Stack.Screen
             name="MenuList"
             component={MenuList}
             options={{ title: 'Lista de cardápio' }}
           />
-
           <Stack.Screen
             name="RestaurantRegistration"
             component={RestaurantRegistration}
@@ -68,6 +62,7 @@ export default function App() {
           />
         </Stack.Navigator>
       </NavigationContainer>
+      <ErrorDialog />
     </PaperProvider>
   );
 }

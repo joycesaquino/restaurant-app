@@ -1,5 +1,9 @@
-import { Alert } from 'react-native';
+import mitt from 'mitt';
+
+export type ErrorDialogPayload = { title: string; message: string };
+
+export const errorDialogEmitter = mitt<{ show: ErrorDialogPayload }>();
 
 export function showError(title: string, message: string) {
-  Alert.alert(title, message);
+  errorDialogEmitter.emit('show', { title, message });
 } 

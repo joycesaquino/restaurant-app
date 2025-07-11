@@ -59,9 +59,8 @@ export default function RestaurantRegistration() {
   useEffect(() => {
     getCurrentUser().then(user => {
       if (!user || user.userType !== 'Admin') {
-        Alert.alert('Acesso negado', 'Apenas administradores podem acessar esta tela.', [
-          { text: 'OK', onPress: () => navigation.goBack() },
-        ]);
+        showError('Acesso negado', 'Apenas administradores podem acessar esta tela.')
+        navigation.goBack();
       } else {
         setIsAdmin(true);
       }
@@ -77,7 +76,6 @@ export default function RestaurantRegistration() {
         address: `${values.street}, ${values.number} - ${values.district}, ${values.city} - ${values.uf}`,
         cep: values.cep,
         cnpj: values.cnpj,
-        // Adicione outros campos conforme necessário
       };
       await addRestaurant(newRestaurant);
       navigation.navigate('ProductSuccess', { type: 'restaurant' });
