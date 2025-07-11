@@ -1,12 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// Importe o model Restaurant quando existir
-// import { Restaurant } from '../model/restaurant';
 
 type Restaurant = {
   id: string;
   name: string;
   address: string;
-  // Adicione outros campos conforme necessário
 };
 
 export async function addRestaurant(restaurant: Restaurant): Promise<void> {
