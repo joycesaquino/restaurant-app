@@ -49,7 +49,7 @@ Este é um projeto desenvolvido como parte do **Trabalho Prático da     discipl
 
 📺 Assista ao vídeo de apresentação do app pelo link abaixo:
 
-🔗 [Link para o vídeo no Google Drive]([https://youtube.com/seu-video-aqui](https://drive.google.com/file/d/1HlIaAh5TOVc_KekvrVlncnn0jFjrOeuN/view?usp=drive_link))  
+🔗 [Link para o vídeo no Google Drive](https://youtube.com/seu-video-aqui](https://drive.google.com/file/d/1HlIaAh5TOVc_KekvrVlncnn0jFjrOeuN/view?usp=drive_link)  
 Note: Deixei a configuração de acesso para que qualquer pessoa com o link consiga acessar o vídeo, não consegui fazer upload no github por conta do tamanho e por isso mantive o GDrive, qualquer problema de acesso posso disponibilizar por outro meio.
 
 
